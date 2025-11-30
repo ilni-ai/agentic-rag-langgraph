@@ -11,6 +11,9 @@ This project implements a fully working **Agentic Retrieval-Augmented Generation
 
 ---
 
+```markdown
+The Mermaid source is available here: [architecture.mmd](architecture.mmd)
+
 ## Folder Structure
 
 ```
