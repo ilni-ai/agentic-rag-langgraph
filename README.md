@@ -9,12 +9,19 @@ This project implements a fully working **Agentic Retrieval-Augmented Generation
 - React + Vite for a clean UI with suggested follow-up questions  
 - Domain guardrails to prevent out-of-scope answers  
 
+
 ---
 
-```markdown
-The Mermaid source is available here: [architecture.mmd](architecture.mmd)
+## 📊 Architecture Diagram
 
-## Folder Structure
+![Agentic RAG Architecture](architecture-runtime.png)
+
+The Mermaid source is available here:  
+**[architecture.mmd](architecture.mmd)**
+
+---
+
+## 📁 Folder Structure
 
 ```
 agentic-rag-langgraph/
@@ -49,7 +56,7 @@ agentic-rag-langgraph/
 
 ---
 
-## Backend Setup (Flask + LangGraph)
+## ⚙️ Backend Setup (Flask + LangGraph)
 
 ### 1. Build the FAISS Vector Store
 
@@ -109,7 +116,7 @@ http://localhost:5000
 
 ---
 
-## Frontend Setup (React + Vite)
+## 🖥 Frontend Setup (React + Vite)
 
 ```bash
 cd agentic-rag-ui
@@ -125,7 +132,7 @@ http://localhost:5173
 
 ---
 
-## LangGraph Agent Workflow
+## 🧠 LangGraph Agent Workflow
 
 ```
 User Query
@@ -145,7 +152,7 @@ Return JSON → React UI → stored in SQLite
 
 ---
 
-## Features
+## 🔍 Features
 
 - Semantic retrieval (FAISS)  
 - Multi-hop retrieval  
@@ -157,3 +164,4 @@ Return JSON → React UI → stored in SQLite
 - Reset session + chat history API  
 
 ---
+
