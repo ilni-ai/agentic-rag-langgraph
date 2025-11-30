@@ -1,107 +1,156 @@
-# 🔍 Simple Agentic RAG with LangGraph, Gemini & FAISS
+# Agentic RAG with LangGraph, Gemini, and FAISS  
 
-This is a full-stack example of a **Retrieval-Augmented Generation (RAG)** system enhanced with:
+This project implements a fully working **Agentic Retrieval-Augmented Generation (RAG)** system using:
 
-- 🧠 **LangGraph** for agentic flows
-- 🔎 **FAISS** for fast local semantic retrieval
-- 🧬 **Gemini API** for language generation + embeddings
-- 💾 **Session memory** using SQLite
-- ⚛️ **React + Bootstrap UI** with follow-up suggestions
+- LangGraph for multi-step agent workflows  
+- Gemini 2.x Flash for LLM reasoning + strict grounding  
+- FAISS for fast local semantic search  
+- SQLite for persistent chat memory  
+- React + Vite for a clean UI with suggested follow-up questions  
+- Domain guardrails to prevent out-of-scope answers  
 
 ---
 
-## 📂 Folder Structure
+## Folder Structure
 
 ```
 agentic-rag-langgraph/
-├── langgraph-server/
+├── agentic-rag-ui/                 # React frontend
+│   ├── src/
+│   ├── package.json
+│   └── ...
+│
+├── langgraph-server/               # Python backend (Flask + LangGraph)
 │   ├── app.py
-│   ├── rag_routes.py
+│   ├── routes/
+│   │   └── rag_routes.py
 │   ├── core/
 │   │   └── langgraph_runner.py
 │   ├── data/
-│   │   └── info.txt
-│   ├── faiss_index/
+│   │   └── info.txt                # Knowledge base for FAISS
+│   ├── faiss_index/                # Auto-generated vector index
 │   │   ├── index.faiss
 │   │   └── index.pkl
-│   ├── memory.db
 │   ├── utils/
 │   │   └── cosine_similarity.py
-│   ├── .env
+│   ├── build_vectorstore.py        # Builds vector store from info.txt
+│   ├── document_loader.py
+│   ├── memory.db                   # SQLite chat history
 │   ├── requirements.txt
-│   └── README.md
-├── agentic-rag-ui/
-│   └── (React frontend)
+│   └── .env
+│
+├── anim.html                       # LangGraph execution animation
+├── diagram.html                    # Architecture diagram
+└── README.md
 ```
 
 ---
 
-## 🔧 Setup Instructions
+## Backend Setup (Flask + LangGraph)
 
-### 1. Backend Setup
+### 1. Build the FAISS Vector Store
 
 ```bash
-cd langgraph-backend
-python -m venv venv
-venv\Scripts\activate  # or source venv/bin/activate (Mac/Linux)
+cd langgraph-server
+python build_vectorstore.py
+```
 
+---
+
+### 2. Create and activate a virtual environment
+
+```bash
+python -m venv venv
+venv\Scripts\activate        # Windows
+# or
+source venv/bin/activate       # macOS/Linux
+```
+
+---
+
+### 3. Install dependencies
+
+```bash
 pip install -r requirements.txt
 ```
 
-### 2. Add your Gemini API key to `.env`
+---
+
+### 4. Add your Gemini API key
+
+Create:
 
 ```
-GEMINI_API_KEY=your_google_api_key_here
+langgraph-server/.env
 ```
 
-### 3. Start Flask server
+Inside:
 
-```bash
-python app.py
-# Runs on http://localhost:5000
+```
+GEMINI_API_KEY=your_key_here
 ```
 
 ---
 
-### 4. Frontend Setup
+### 5. Start the backend
+
+```bash
+python app.py
+```
+
+Runs at:
+
+```
+http://localhost:5000
+```
+
+---
+
+## Frontend Setup (React + Vite)
 
 ```bash
 cd agentic-rag-ui
 npm install
 npm run dev
-# Runs on http://localhost:5173
+```
+
+Runs at:
+
+```
+http://localhost:5173
 ```
 
 ---
 
-## 🧠 LangGraph Agent Flow
-
-```mermaid
-graph TD
-    A(User Query + Memory) --> B(Semantic Retrieval using FAISS)
-    B --> C(Gemini LLM with Chat History + Facts)
-    C --> D(Response + Suggested Follow-Ups)
-    D --> E(Memory Update via SQLite)
+## LangGraph Agent Workflow
 
 ```
-
-- **Vector DB**: FAISS (with local persistence in `faiss_index/`)
-- **Memory**: SQLite stores past user/AI messages
-- **FAISS** = handles semantic search, memory of facts (vector store)
-- **SQLite** = memory of conversation (chat logs)
-- **LangGraph** wraps this into a state machine
-
----
-
-## 🧪 Features
-
-- ✅ Semantic search over your own `.txt` documents
-- ✅ Persistent FAISS index
-- ✅ LangGraph agent flow with memory
-- ✅ Gemini API for embeddings and chat
-- ✅ Follow-up question generation
-- ✅ Reset session & view chat history
-- ✅ Friendly UI with Markdown rendering
+User Query
+      ↓
+domain_check
+      ↓
+retrieve
+      ↓
+reason
+      ├── sufficient → respond
+      └── insufficient → retrieve_again → respond
+      ↓
+reflect
+      ↓
+Return JSON → React UI → stored in SQLite
+```
 
 ---
 
+## Features
+
+- Semantic retrieval (FAISS)  
+- Multi-hop retrieval  
+- Domain guardrails  
+- Strict grounding (no hallucinations)  
+- Follow-up question generation  
+- Persistent conversation memory  
+- React UI with markdown  
+- Reset session + chat history API  
+
+---
